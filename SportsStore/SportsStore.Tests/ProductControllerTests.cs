@@ -25,8 +25,10 @@ namespace SportsStore.Tests
                 new Product { ProductID = 5, Name = "P5"}
             }).AsQueryable());
 
-            var sut = new ProductController(mockRepository.Object);
-            sut.PageSize = 3;
+            var sut = new ProductController(mockRepository.Object)
+            {
+                PageSize = 3
+            };
 
             var result = sut.List(2).ViewData.Model as IEnumerable<Product>;
 
