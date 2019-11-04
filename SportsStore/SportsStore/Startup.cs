@@ -48,6 +48,8 @@ namespace SportsStore
                     name: "Default",
                     pattern: "{controller=product}/{action=List}/{id?}");
             });
+
+            SeedData.EnsurePopulated(app);
         }
     }
 }
