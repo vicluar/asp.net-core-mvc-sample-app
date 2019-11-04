@@ -11,11 +11,13 @@ namespace SportsStore.Controllers
     {
         private readonly IProductRepository _productRepository;
 
+        public int PageSize { get; set; } = 4;
+
         public ProductController(IProductRepository productRepository)
         {
             _productRepository = productRepository;
         }
 
-        public ViewResult List() => View(_productRepository.Products);
+        public ViewResult List(int productPage = 1) => View(_productRepository.Products);
     }
 }
