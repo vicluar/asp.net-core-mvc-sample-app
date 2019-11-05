@@ -18,6 +18,14 @@ namespace SportsStore.Controllers
             _productRepository = productRepository;
         }
 
-        public ViewResult List(int productPage = 1) => View(_productRepository.Products);
+        public ViewResult List(int productPage = 1) 
+        {
+            var productsResult = _productRepository.Products
+                .OrderBy(p => p.ProductID)
+                .Skip((productPage - 1) * PageSize)
+                .Take(PageSize);
+
+            return View(productsResult);
+        }
     }
 }
