@@ -1,6 +1,7 @@
 ﻿using Moq;
 using SportsStore.Controllers;
 using SportsStore.Models;
+using SportsStore.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,9 +31,9 @@ namespace SportsStore.Tests
                 PageSize = 3
             };
 
-            var result = sut.List(2).ViewData.Model as IEnumerable<Product>;
+            var result = sut.List(2).ViewData.Model as ProductsListViewModel;
 
-            var products = result.ToArray();
+            var products = result.Products.ToArray();
             Assert.True(products.Length == 2);
             Assert.Equal("P4", products[0].Name);
             Assert.Equal("P5", products[1].Name);
