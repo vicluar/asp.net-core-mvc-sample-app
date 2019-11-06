@@ -12,12 +12,15 @@ namespace SportsStore.Tests
 {
     public class ProductControllerTests
     {
-        [Fact]
-        public void Can_Paginate()
-        {
-            var mockRepository = new Mock<IProductRepository>();
+        private Mock<IProductRepository> _mockProductRepository;
 
-            mockRepository.Setup(mr => mr.Products).Returns((new Product[]
+        public ProductControllerTests() => Initialize();
+
+        private void Initialize()
+        {
+            _mockProductRepository = new Mock<IProductRepository>();
+
+            _mockProductRepository.Setup(mr => mr.Products).Returns((new Product[]
             {
                 new Product { ProductID = 1, Name = "P1"},
                 new Product { ProductID = 2, Name = "P2"},
@@ -25,8 +28,12 @@ namespace SportsStore.Tests
                 new Product { ProductID = 4, Name = "P4"},
                 new Product { ProductID = 5, Name = "P5"}
             }).AsQueryable());
+        }
 
-            var sut = new ProductController(mockRepository.Object)
+        [Fact]
+        public void Can_Paginate()
+        {
+            var sut = new ProductController(_mockProductRepository.Object)
             {
                 PageSize = 3
             };
@@ -37,6 +44,23 @@ namespace SportsStore.Tests
             Assert.True(products.Length == 2);
             Assert.Equal("P4", products[0].Name);
             Assert.Equal("P5", products[1].Name);
+        }
+
+        [Fact]
+        public void Can_Send_Pagination_View_Model()
+        {            
+            // Arrange
+            var sut = new ProductController(_mockProductRepository.Object) { PageSize = 3 };
+            
+            // Act
+            var result = sut.List(2).ViewData.Model as ProductsListViewModel;
+            
+            // Assert
+            PagingInfo pageInfo = result.PagingInfo;
+            Assert.Equal(2, pageInfo.CurrentPage);
+            Assert.Equal(3, pageInfo.ItemsPerPage);
+            Assert.Equal(5, pageInfo.TotalItems);
+            Assert.Equal(2, pageInfo.TotalPages);
         }
     }
 }
