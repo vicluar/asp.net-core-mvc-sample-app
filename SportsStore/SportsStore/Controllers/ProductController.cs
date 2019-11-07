@@ -21,7 +21,6 @@ namespace SportsStore.Controllers
 
         public ViewResult List(int productPage = 1)
         {
-
             var productsListViewModel = new ProductsListViewModel
             {
                 Products = GetProducts(productPage),
