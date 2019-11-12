@@ -38,7 +38,7 @@ namespace SportsStore.Tests
                 PageSize = 3
             };
 
-            var result = sut.List(2).ViewData.Model as ProductsListViewModel;
+            var result = sut.List(null, 2).ViewData.Model as ProductsListViewModel;
 
             var products = result.Products.ToArray();
             Assert.True(products.Length == 2);
@@ -53,7 +53,7 @@ namespace SportsStore.Tests
             var sut = new ProductController(_mockProductRepository.Object) { PageSize = 3 };
             
             // Act
-            var result = sut.List(2).ViewData.Model as ProductsListViewModel;
+            var result = sut.List(null, 2).ViewData.Model as ProductsListViewModel;
             
             // Assert
             PagingInfo pageInfo = result.PagingInfo;
