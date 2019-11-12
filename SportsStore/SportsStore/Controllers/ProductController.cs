@@ -19,20 +19,22 @@ namespace SportsStore.Controllers
             _productRepository = productRepository;
         }
 
-        public ViewResult List(int productPage = 1)
+        public ViewResult List(string category, int productPage = 1)
         {
             var productsListViewModel = new ProductsListViewModel
             {
-                Products = GetProducts(productPage),
-                PagingInfo = GetPagingInfo(productPage)
+                Products = GetProducts(productPage, category),
+                PagingInfo = GetPagingInfo(productPage),
+                CurrentCategory = category
             };
 
             return View(productsListViewModel);
         }
 
-        private IQueryable<Product> GetProducts(int productPage)
+        private IQueryable<Product> GetProducts(int productPage, string category)
         {
             return _productRepository.Products
+                .Where(p => category == null || p.Category == category)
                 .OrderBy(p => p.ProductID)
                 .Skip((productPage - 1) * PageSize)
                 .Take(PageSize);
