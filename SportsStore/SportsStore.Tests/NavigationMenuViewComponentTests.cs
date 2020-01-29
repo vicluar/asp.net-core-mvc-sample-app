@@ -59,7 +59,7 @@ namespace SportsStore.Tests
             };
             sut.RouteData.Values["category"] = categoryToSelect;
 
-            var result = (sut.Invoke() as ViewViewComponentResult).ViewData["SelectedCategory"].ToString();
+            var result = (sut.Invoke() as ViewViewComponentResult).ViewData["SeletedCategory"].ToString();
 
             Assert.Equal(categoryToSelect, result);
         }
