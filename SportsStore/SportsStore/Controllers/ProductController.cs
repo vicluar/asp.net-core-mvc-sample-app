@@ -24,7 +24,7 @@ namespace SportsStore.Controllers
             var productsListViewModel = new ProductsListViewModel
             {
                 Products = GetProducts(productPage, category),
-                PagingInfo = GetPagingInfo(productPage),
+                PagingInfo = GetPagingInfo(productPage, category),
                 CurrentCategory = category
             };
 
@@ -40,13 +40,15 @@ namespace SportsStore.Controllers
                 .Take(PageSize);
         }
 
-        private PagingInfo GetPagingInfo(int productPage)
+        private PagingInfo GetPagingInfo(int productPage, string category)
         {
             return new PagingInfo
             {
                 CurrentPage = productPage,
                 ItemsPerPage = PageSize,
-                TotalItems = _productRepository.Products.Count()
+                TotalItems = category == null ? 
+                    _productRepository.Products.Count() :
+                    _productRepository.Products.Where(_ => _.Category == category).Count()
             };
         }
     }
