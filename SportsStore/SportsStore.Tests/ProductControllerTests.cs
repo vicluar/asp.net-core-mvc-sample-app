@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.AspNetCore.Mvc;
+using Moq;
 using SportsStore.Controllers;
 using SportsStore.Models;
 using SportsStore.Models.ViewModels;
@@ -78,6 +79,28 @@ namespace SportsStore.Tests
             Assert.Equal(2, result.Length);
             Assert.True(result[0].Name == "P2" && result[0].Category == "Cat2");
             Assert.True(result[1].Name == "P4" && result[1].Category == "Cat2");
+        }
+
+        [Fact]
+        public void Generate_Category_Specific_Product_Count()
+        {
+            var sut = new ProductController(_mockProductRepository.Object)
+            {
+                PageSize = 3
+            };
+
+            Func<ViewResult, ProductsListViewModel> GetModel = result =>
+                result?.ViewData?.Model as ProductsListViewModel;
+
+            var totalItemsCat1 = GetModel(sut.List("Cat1"))?.PagingInfo.TotalItems;
+            var totalItemsCat2 = GetModel(sut.List("Cat2"))?.PagingInfo.TotalItems;
+            var totalItemsCat3 = GetModel(sut.List("Cat3"))?.PagingInfo.TotalItems;
+            var totalItemsAll = GetModel(sut.List(null))?.PagingInfo.TotalItems;
+
+            Assert.Equal(2, totalItemsCat1);
+            Assert.Equal(2, totalItemsCat2);
+            Assert.Equal(1, totalItemsCat3);
+            Assert.Equal(5, totalItemsAll);
         }
     }
 }
